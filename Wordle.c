@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include <time.h>
 #include <windows.h>
-#include <MMSystem.h>
 
 #define maxnumwords 5757
 
@@ -37,15 +36,7 @@ void reset() {
 int guess_check(char* answer, char* guess)
 {
 	char clue[6] = { '_', '_', '_', '_', '_','\0' }, c;
-	int correctletters = 0, duplicatecounter = 0;
-	for (int l = 0;l < 5;l++)
-	{
-		for (int p = 1;p < 5;p++)
-		{
-			if (answer[l] == answer[p])
-				duplicatecounter++;
-		}
-	}
+	int correctletters = 0;
 	for (int i = 0;i < 5;i++)
 	{
 		if (guess[i] == answer[i])
@@ -60,7 +51,7 @@ int guess_check(char* answer, char* guess)
 		{
 			for (int h = 0;h < 5;h++)
 			{
-				if (guess[j] == answer[h] && clue[h] != 'G' && duplicatecounter > 0)
+				if (guess[j] == answer[h] && clue[h] != 'G')
 				{
 					clue[j] = 'Y';
 				}
@@ -99,7 +90,6 @@ int guess_check(char* answer, char* guess)
 
 void main()
 {
-	PlaySound(TEXT("C:\\Users\\ItsAl\\Desktop\\test.wav"), NULL, SND_ASYNC);
 	//load in the words
 	char** wordslist = calloc(maxnumwords, sizeof(char*));
 	int wordcount = 0;
@@ -142,12 +132,6 @@ void main()
 		printf("%s.\n", answer);
 		reset();
 	}
-	struct Player player1;
-	printf("Please enter your name to save your score:");
-	scanf("%s", name);
-	strcpy(player1.name, name);
-	player1.score = score;
-	printf("Name: %s | Score: %d", player1.name, player1.score);
 	for (int i = 0;i < wordcount;i++)
 	{
 		free(wordslist[i]);
