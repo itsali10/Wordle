@@ -3,14 +3,9 @@
 #include <stdlib.h>
 #include <time.h>
 #include <windows.h>
+#include <stdbool.h>
 
 #define maxnumwords 5757
-
-struct Player
-{
-	char name[50];
-	int score;
-};
 
 void green() {
 	printf("\033[0;32m");
@@ -37,12 +32,15 @@ int guess_check(char* answer, char* guess)
 {
 	char clue[6] = { '_', '_', '_', '_', '_','\0' }, c;
 	int correctletters = 0;
+	bool answerflag[5] = { false, false, false, false, false };
+
 	for (int i = 0;i < 5;i++)
 	{
 		if (guess[i] == answer[i])
 		{
 			clue[i] = 'G';
 			correctletters++;
+			answerflag[i] = true;
 		}
 	}
 	for (int j = 0;j < 5;j++)
@@ -51,13 +49,17 @@ int guess_check(char* answer, char* guess)
 		{
 			for (int h = 0;h < 5;h++)
 			{
-				if (guess[j] == answer[h] && clue[h] != 'G')
+				if (guess[j] == answer[h] && !answerflag[h])
 				{
 					clue[j] = 'Y';
+					answerflag[h] = true;
+					break;
 				}
 			}
 		}
 	}
+
+
 	for (int k = 0;k < 5;k++)
 	{
 		c = guess[k];
@@ -106,11 +108,12 @@ void main()
 	//pick a random word
 	srand(time(NULL));
 	char* answer = wordslist[rand() % wordcount];
+	answer = "tutor";
 
 	//start game
 	int guessnum = 0, x = 0, score = 6;
 	char* guess = malloc(6 * sizeof(char));
-	char* name = malloc(51 * sizeof(char));
+	
 	while (guessnum < 6 && x != 1)
 	{
 		printf("Enter 5 letter word and press enter: ");
@@ -118,12 +121,10 @@ void main()
 		printf("\nYou guessed the word: %s\n\n", guess);
 		guessnum++;
 		x = guess_check(answer, guess);
-		score--;
 	}
 	if (x == 1)
 	{
-		score += 5;
-		printf("\nYou have correctly guessed the word!\n", guessnum);
+		printf("\nYou have correctly guessed the word!\n");
 	}
 	else
 	{
@@ -132,6 +133,7 @@ void main()
 		printf("%s.\n", answer);
 		reset();
 	}
+
 	for (int i = 0;i < wordcount;i++)
 	{
 		free(wordslist[i]);
