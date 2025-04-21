@@ -1,0 +1,1 @@
+As a project for my Structured Programming Course in my University, I wrote the code for the famous game Wordle using C programming Language. words.txt contains all the 5 letter words that are applicable in the game. 
